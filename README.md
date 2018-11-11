@@ -1,4 +1,4 @@
-# AIM416 Build and ETL pipeline to analyze customer data
+# AIM416 Build an ETL pipeline to analyze customer data
 ## Introduction
 In this workshop we will use AWS Glue ETL to enrich [Amazon Product Review dataset](https://registry.opendata.aws/amazon-reviews/).  To do that we will pass the product review text to [Amazon Comprehend](https://aws.amazon.com/comprehend/) to detect sentiment, extract entities and key phrases which will be added to the original review dataset.  We will then save the dataset to Amazon S3 in Apache Parquet format so it can be quiered with [Amazon Athena](https://aws.amazon.com/athena/) and visualized with [Amazon QuickSight](https://aws.amazon.com/quicksight/).
 
