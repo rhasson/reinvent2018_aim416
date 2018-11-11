@@ -47,6 +47,7 @@ df2 = df \
   .drop('review_body')
 
 ## Write out result set to S3 in Parquet format
+## TODO: update the S3 path with your own
 df2.write \
   .mode('overwrite') \
   .parquet('s3://<YOUR_BUCKET/reinvent/aim416/output/parquet')
