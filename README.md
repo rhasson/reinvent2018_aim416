@@ -6,8 +6,10 @@ In this workshop we will use AWS Glue ETL to enrich [Amazon Product Review datas
 1. [Apache Spark API documentation](http://spark.apache.org/docs/2.2.1/api/python/pyspark.sql.html)
 2. [Amazon Comprehend Boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/comprehend.html#id30)
 
+**NOTE: This workshop assumes you are running in us-east-1 region.  If you prefer to run in another region you will need to update the accompanying scripts.  Also be warned that the Amazon product review dataset is hosted in us-east-1, accessing it from another region may inccur additional data transfer costs.**
+
 ## Authorization and permissions
-Before we can start we need to define the appropriate policies and permissions for the differnet services to use.  In this workshop I assume you are logged in as a root user or a user with enough privilages to be able to create IAM roles and assign policies.  If you don't have that level of permission, either ask the owner of your account to help or create a personal account where you have more permission.
+Before we can start we need to define the appropriate policies and permissions for the differnet services to use.  In this workshop I assume you are logged in as a root user or a user with enough privileges to be able to create IAM roles and assign policies.  If you don't have that level of permission, either ask the owner of your account to help or create a personal account where you have more permission.
 
 If you get stuck, there is more information here:
 1. [Setting up IAM Permissions for AWS Glue](https://docs.aws.amazon.com/glue/latest/dg/getting-started-access.html)
@@ -36,7 +38,7 @@ Click next and finish creating the role.  In the list of roles, select your new 
 ```
 
 ## Getting Started
-Start by downloading __comprehend_api.py__ to your local computer.  Then open the AWS Console and navigate to the S3 console.  If you don't already have one, create a bucket with a unique name.  S3 uses a flat namespace which means bucket names must be unique across all S3 customers.  Inside the bukcet, create a subfolder and name it __deps__ and upload __comprehend_api.py__ into the deps folder.  The __comprehend_api.py__ file includes a few functions that allow us to take a row field from our dataset and pass it to the Comprehend API.  
+Start by downloading [__comprehend_api.py__](https://raw.githubusercontent.com/rhasson/reinvent2018_aim416/master/comprehend_api.py) to your local computer.  Then open the AWS Console and navigate to the S3 console.  If you don't already have one, create a bucket with a unique name.  S3 uses a flat namespace which means bucket names must be unique across all S3 customers.  Inside the bukcet, create a subfolder and name it __deps__ and upload __comprehend_api.py__ into the deps folder.  The __comprehend_api.py__ file includes a few functions that allow us to take a row field from our dataset and pass it to the Comprehend API.  
 For this function to work as a UDF (user defined function) in [Apache Spark](http://spark.apache.org/docs/2.2.1/api/python/pyspark.sql.html) which AWS Glue uses under the hood, we need to wrap our function in a special UDF function factory.  To simplify our code for reability and extensibility we broke out these functions into their own file.
 
 ## Crawling Source Dataset
@@ -49,7 +51,7 @@ The next thing we need to do is create an AWS Glue ETL job that when executed wi
 Further down under __Concurrent DPUs per job run__ change it to __5__.  A Data Processing Unit or DPU is a measure of resources that we can assign to our job.  A single DPU equates to 4 CPU cores and 16GB of memory.  For this excercise and to reduce cost, 5 DPU is sufficient.  Continue on with the wizard accepting the defaults and finally save the job.
 
 ### Editing the ETL script
-Now that your job has been created, you should have the ETL script editor open in the console.  Select all of the text in the current script and delete it.  Come back to this repo, open __workshop_job.py__ and copy its contents and paste them into the AWS Glue ETL script editor.  Click __save__.  Review the script and note the __TODO__ comments and make the appropriate changes to the script.
+Now that your job has been created, you should have the ETL script editor open in the console.  Select all of the text in the current script and delete it.  Come back to this repo, open [__workshop_job.py__](https://raw.githubusercontent.com/rhasson/reinvent2018_aim416/master/workshop_job.py) and copy its contents and paste them into the AWS Glue ETL script editor.  Click __save__.  Review the script and note the __TODO__ comments and make the appropriate changes to the script.
 
 As you will see, the script does the following:
 1. Read the raw dataset as defined by the AWS Glue Data Catalog
@@ -69,3 +71,5 @@ As you may have already noticed I included a __getEntities__ function in the __c
 Amazon Comprehend also includes an API to extract key phrases from text.  I've created a skeleton UDF in comprehend_api.py to get you started.  In this part of the workshop, go ahead and implement the __getKeyPhrases__ UDF.  You will need to edit comprehend_api.py on your local machine, make the code changes and upload it back to S3.  You can either overwrite the existing file or upload it under a different name.  Don't forget to confirm you have the correct path and filename under in __Python library path__ field of the job settings.
 ### Step 3
 The product review dataset has reviews in other languages.  Both German (DE) and French (FR) are supported by Comprehend and are also available in our dataset.  In your AWS Glue ETL script create another DataFrame representing only German lanuage reviews.  You then need to further extend the comprehend_api.py UDFs to allow you to pass a second parameter representing the lanuage.  Go ahead and try this with Sentiment analysis and see what you get.
+### Step 4
+Open Amazon [QuickSight](https://aws.amazon.com/quicksight/) and configure appropriate [IAM permissions] (https://docs.aws.amazon.com/quicksight/latest/user/managing-permissions.html).  Once setup, add a Data Set representing the table we created in Step 3.  Go ahead and explore creating visualizations beased on the data.
