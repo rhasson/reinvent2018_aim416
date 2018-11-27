@@ -2,11 +2,11 @@
 ## Introduction
 In this workshop we will use AWS Glue ETL to enrich [Amazon Product Review dataset](https://registry.opendata.aws/amazon-reviews/).  To do that we will pass the product review text to [Amazon Comprehend](https://aws.amazon.com/comprehend/) to detect sentiment, extract entities and key phrases which will be added to the original review dataset.  We will then save the dataset to Amazon S3 in Apache Parquet format so it can be quiered with [Amazon Athena](https://aws.amazon.com/athena/) and visualized with [Amazon QuickSight](https://aws.amazon.com/quicksight/).
 
+**NOTE: This workshop assumes you are running in us-east-1 region.  If you prefer to run in another region you will need to update the accompanying scripts.  Also be warned that the Amazon product review dataset is hosted in us-east-1, accessing it from another region may inccur additional data transfer costs.**
+
 ## Helpful links
 1. [Apache Spark API documentation](http://spark.apache.org/docs/2.2.1/api/python/pyspark.sql.html)
 2. [Amazon Comprehend Boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/comprehend.html#id30)
-
-**NOTE: This workshop assumes you are running in us-east-1 region.  If you prefer to run in another region you will need to update the accompanying scripts.  Also be warned that the Amazon product review dataset is hosted in us-east-1, accessing it from another region may inccur additional data transfer costs.**
 
 ## Authorization and permissions
 Before we can start we need to define the appropriate policies and permissions for the differnet services to use.  In this workshop I assume you are logged in as a root user or a user with enough privileges to be able to create IAM roles and assign policies.  If you don't have that level of permission, either ask the owner of your account to help or create a personal account where you have more permission.
